@@ -11,7 +11,7 @@ const server = await createServer({
     async handleHotUpdate(ctx) {
       ctx.modules.forEach((m) => {
         if (m.id) {
-
+          console.log('> last source map', runner.moduleCache.getSourceMap(m.id));
           runner.moduleCache.deleteByModuleId(m.id);
           console.log('> cleared file from vite module cache', m.id);
         }
@@ -33,7 +33,10 @@ const node = new ViteNodeServer(server)
 
 // fixes stacktraces in Errors
 installSourcemapsSupport({
-  getSourceMap: source => node.getSourceMap(source),
+  getSourceMap: (source) => {
+    console.log('> get source map!', source);
+    return node.getSourceMap(source);
+  }
 })
 
 // create vite-node runner
